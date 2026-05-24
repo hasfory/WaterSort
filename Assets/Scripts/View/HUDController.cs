@@ -41,13 +41,13 @@ namespace WaterSort
             BuildLosePanel(cvGO.transform);
 
             var gm = GameManager.Instance;
-            gm.OnMoveCountChanged += n => { if (_moveText)  _moveText.text  = $"Ходів: {n}"; };
-            gm.OnLevelLoaded      += n => { if (_levelText) _levelText.text = $"Рівень {n}"; };
+            gm.OnMoveCountChanged += n => { if (_moveText)  _moveText.text  = $"Moves: {n}"; };
+            gm.OnLevelLoaded      += n => { if (_levelText) _levelText.text = $"Level {n}"; };
             gm.OnWin  += ShowWin;
             gm.OnLose += ShowLose;
 
-            if (_levelText) _levelText.text = $"Рівень {gm.CurrentLevel}";
-            if (_moveText)  _moveText.text  = "Ходів: 0";
+            if (_levelText) _levelText.text = $"Level {gm.CurrentLevel}";
+            if (_moveText)  _moveText.text  = "Moves: 0";
         }
 
         private void BuildTopBar(Transform root)
@@ -55,10 +55,10 @@ namespace WaterSort
             var bar = Panel("TopBar", root, BgBar);
             Anchors(bar.GetComponent<RectTransform>(), 0,1,1,1, 0,-110,0,0);
 
-            _levelText = Txt("LT", bar.transform, "Рівень 1", 42, TextAnchor.MiddleLeft);
+            _levelText = Txt("LT", bar.transform, "Level 1", 42, TextAnchor.MiddleLeft);
             Anchors(_levelText.rectTransform, 0.04f,0,0.5f,1);
 
-            _moveText = Txt("MT", bar.transform, "Ходів: 0", 40, TextAnchor.MiddleRight);
+            _moveText = Txt("MT", bar.transform, "Moves: 0", 40, TextAnchor.MiddleRight);
             Anchors(_moveText.rectTransform, 0.5f,0,0.96f,1);
         }
 
@@ -67,11 +67,11 @@ namespace WaterSort
             var bar = Panel("BotBar", root, BgBar);
             Anchors(bar.GetComponent<RectTransform>(), 0,0,1,0, 0,0,0,118);
 
-            var u = Btn("↩  Відмінити", bar.transform, BtnOrange);
+            var u = Btn("↩  Undo", bar.transform, BtnOrange);
             Anchors(u.GetComponent<RectTransform>(), 0.04f,0.1f,0.48f,0.9f);
             u.onClick.AddListener(() => GameManager.Instance.Undo());
 
-            var r = Btn("↺  Спочатку", bar.transform, BtnBlue);
+            var r = Btn("↺  Restart", bar.transform, BtnBlue);
             Anchors(r.GetComponent<RectTransform>(), 0.52f,0.1f,0.96f,0.9f);
             r.onClick.AddListener(() => GameManager.Instance.Restart());
         }
@@ -81,18 +81,18 @@ namespace WaterSort
             _winPanel = Panel("WinPanel", root, new Color(0.05f,0.03f,0.15f,0.96f));
             Anchors(_winPanel.GetComponent<RectTransform>(), 0,0,1,1);
 
-            var t = Txt("T", _winPanel.transform, "🎉 Рівень пройдено!", 56, TextAnchor.MiddleCenter);
+            var t = Txt("T", _winPanel.transform, "🎉 Level Complete!", 56, TextAnchor.MiddleCenter);
             t.color = Gold;
             Anchors(t.rectTransform, 0.05f,0.60f,0.95f,0.76f);
 
             _winMovesText = Txt("M", _winPanel.transform, "", 38, TextAnchor.MiddleCenter);
             Anchors(_winMovesText.rectTransform, 0.1f,0.48f,0.9f,0.60f);
 
-            var next = Btn("Наступний рівень  →", _winPanel.transform, BtnGreen);
+            var next = Btn("Next Level →", _winPanel.transform, BtnGreen);
             Anchors(next.GetComponent<RectTransform>(), 0.15f,0.34f,0.85f,0.46f);
             next.onClick.AddListener(() => { _winPanel.SetActive(false); GameManager.Instance.NextLevel(); });
 
-            var again = Btn("↺  Зіграти знову", _winPanel.transform, BtnBlue);
+            var again = Btn("↺  Play Again", _winPanel.transform, BtnBlue);
             Anchors(again.GetComponent<RectTransform>(), 0.15f,0.19f,0.85f,0.31f);
             again.onClick.AddListener(() => { _winPanel.SetActive(false); GameManager.Instance.Restart(); });
 
@@ -104,11 +104,11 @@ namespace WaterSort
             _losePanel = Panel("LosePanel", root, new Color(0.05f,0.03f,0.15f,0.96f));
             Anchors(_losePanel.GetComponent<RectTransform>(), 0,0,1,1);
 
-            var t = Txt("T", _losePanel.transform, "😔 Немає ходів!", 54, TextAnchor.MiddleCenter);
+            var t = Txt("T", _losePanel.transform, "😔 No Moves Left!", 54, TextAnchor.MiddleCenter);
             t.color = new Color(1f,0.38f,0.38f);
             Anchors(t.rectTransform, 0.05f,0.55f,0.95f,0.72f);
 
-            var r = Btn("↺  Спробувати знову", _losePanel.transform, BtnRed);
+            var r = Btn("↺  Try Again", _losePanel.transform, BtnRed);
             Anchors(r.GetComponent<RectTransform>(), 0.15f,0.38f,0.85f,0.52f);
             r.onClick.AddListener(() => { _losePanel.SetActive(false); GameManager.Instance.Restart(); });
 
@@ -118,7 +118,7 @@ namespace WaterSort
         private void ShowWin()
         {
             if (_winMovesText)
-                _winMovesText.text = $"Виконано за {GameManager.Instance.State.MoveCount} ходів";
+                _winMovesText.text = $"Completed in {GameManager.Instance.State.MoveCount} moves";
             _winPanel?.SetActive(true);
         }
 
