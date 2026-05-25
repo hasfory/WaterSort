@@ -54,10 +54,19 @@ namespace WaterSort
             Instance = this;
         }
 
-        private void Start()
+       private void Start()
         {
             SetupBackground();
-            LoadLevel(1);
+            // LoadLevel(1); // <-- Закоментовано: тепер рівень запускається з меню
+        }
+
+        // ── Додано: Очищення ігрового поля для повернення в меню ──
+        public void ClearBoard()
+        {
+            foreach (var v in _views) if (v) Destroy(v.gameObject);
+            _views.Clear();
+            _currentLevel = 0;
+            _state = null;
         }
 
         // ── Public API ────────────────────────────────────────────────────────────
